@@ -4,7 +4,7 @@
 
 ### conda/apt
 
-gdal
+gdal pandas xlrd
 
 ### pip
 
