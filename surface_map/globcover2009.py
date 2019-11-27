@@ -1,6 +1,6 @@
 import os
 import pandas as pd
-from geotiff_handler import GeoTiffHandler
+from surface_map.geotiff_handler import GeoTiffHandler
 
 class GlobCover2009:
 
@@ -24,7 +24,7 @@ class GlobCover2009:
         value = self.get_value_at_position(lat, lon)
         legend = self.legend[value]
         return {'value': value, 'label': legend['Label'],
-            'source': self.attribution_name}
+            'source': self.attribution_name, 'attribution': self.attribution}
 
 if __name__ == "__main__":
 
