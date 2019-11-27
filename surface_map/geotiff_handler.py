@@ -42,11 +42,3 @@ class GeoTiffHandler:
         fmt = self._pt2fmt(band.DataType)
         value = struct.unpack(fmt, structval)
         return value[0]
-
-if __name__ == "__main__":
-
-    import pandas as pd
-    data = pd.read_excel('maps/globcover2009/Globcover2009_Legend.xls')
-    legend = data.set_index('Value').to_dict('index')
-    gth = GeoTiffHandler('maps/globcover2009/GLOBCOVER_L4_200901_200912_V2.3.tif')
-    print(legend.get(gth.get_value_at_position(52, 8)))
