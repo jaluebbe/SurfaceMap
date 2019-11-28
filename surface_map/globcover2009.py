@@ -11,7 +11,8 @@ class GlobCover2009:
         attribution_name)
 
     def __init__(self):
-        with open(os.path.join(path, 'globcover2009_legend.json'), 'r') as f:
+        legend_file = os.path.join(self.path, 'globcover2009_legend.json')
+        with open(legend_file, 'r') as f:
             self.legend = json.load(f)
         self.gth = GeoTiffHandler(os.path.join(self.path,
             'GLOBCOVER_L4_200901_200912_V2.3.tif'))
@@ -24,7 +25,7 @@ class GlobCover2009:
         if value is None:
             # set to the value describing no data.
             value = 230
-        legend = self.legend[value]
+        legend = self.legend[str(value)]
         return {
             'value': value, 'label': legend['label'], 'color': legend['color'],
             'source': self.attribution_name, 'attribution': self.attribution}
