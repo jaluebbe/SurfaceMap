@@ -1,5 +1,5 @@
 import os
-import pandas as pd
+import json
 from surface_map.geotiff_handler import GeoTiffHandler
 
 class GlobCover2009:
@@ -11,9 +11,8 @@ class GlobCover2009:
         attribution_name)
 
     def __init__(self):
-        data = pd.read_excel(os.path.join(self.path,
-            'Globcover2009_Legend.xls'))
-        self.legend = data.set_index('Value').to_dict('index')
+        with open(os.path.join(path, 'globcover2009_legend.json'), 'r') as f:
+            self.legend = json.load(f)
         self.gth = GeoTiffHandler(os.path.join(self.path,
             'GLOBCOVER_L4_200901_200912_V2.3.tif'))
 
@@ -22,8 +21,12 @@ class GlobCover2009:
 
     def get_data_at_position(self, lat, lon):
         value = self.get_value_at_position(lat, lon)
+        if value is None:
+            # set to the value describing no data.
+            value = 230
         legend = self.legend[value]
-        return {'value': value, 'label': legend['Label'],
+        return {
+            'value': value, 'label': legend['label'], 'color': legend['color'],
             'source': self.attribution_name, 'attribution': self.attribution}
 
 if __name__ == "__main__":
