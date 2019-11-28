@@ -37,6 +37,8 @@ class GeoTiffHandler:
         driver = ds.GetDriver().LongName
         transfInv = gdal.InvGeoTransform(transf)
         px, py = gdal.ApplyGeoTransform(transfInv, lon, lat)
+        if px > cols or py > rows:
+            return None
         structval = band.ReadRaster(int(px), int(py), 1, 1,
             buf_type=band.DataType)
         fmt = self._pt2fmt(band.DataType)
