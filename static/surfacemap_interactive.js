@@ -23,10 +23,13 @@ info.onAdd = function (map) {
 info.showText = function(infoText) {
     this._div.innerHTML = infoText;
 };
-info.updateSurfaceInfo = function(label, value, source) {
+info.updateSurfaceInfo = function(label, value, source, precipitation, min_air_temp, max_air_temp) {
     this._div.innerHTML = "<div style='text-align: right;'><b>"
         + label + "</b></div><div style='text-align: right;'>" 
-        + source + '&nbsp;(' + value +')</div>';
+        + source + "&nbsp;(" + value +")</div>"
+        + "<div style='text-align: right;'>rainfall / year " + precipitation + "&nbsp;cm</div>"
+        + "<div style='text-align: right;'>avg. monthly T from " + min_air_temp + "&nbsp;&deg;C to "
+        + max_air_temp + "&nbsp;&deg;C</div>";
 };
 info.addTo(map);
 var myMarker = L.marker([50, 8.6], {
@@ -45,7 +48,7 @@ function requestSurfaceData(e) {
     xhr.onload = function() {
         if (xhr.status === 200) {
             var surface_info = JSON.parse(xhr.responseText);
-            if (e.type == 'click' || e.type == 'locationfound') {
+            if (e.type == 'click') {
                 myMarker.setLatLng(latlng);
                 if (!map.hasLayer(myMarker)) {
                     myMarker.addTo(map);
@@ -55,10 +58,14 @@ function requestSurfaceData(e) {
                 }
             }
             myMarker._tooltip.setContent("<div style='text-align: center;'><b>"
-                + surface_info.label + "</b></div><div style='text-align: center;'>"
-                + surface_info.source + '&nbsp;(' + surface_info.value + ')</div>');
-	    info.updateSurfaceInfo(surface_info.label, surface_info.value, surface_info.source);
-            map.attributionControl.addAttribution(surface_info.attribution);
+                + surface_info.surface_cover.label + "</b></div><div style='text-align: center;'>"
+                + surface_info.surface_cover.source + '&nbsp;(' + surface_info.surface_cover.value + ')</div>');
+	    info.updateSurfaceInfo(
+	        surface_info.surface_cover.label, surface_info.surface_cover.value, surface_info.surface_cover.source,
+	        surface_info.air_temp_precipitation.annual_precip_cm,
+	        surface_info.air_temp_precipitation.min_air_temp, surface_info.air_temp_precipitation.max_air_temp,);
+            map.attributionControl.addAttribution(surface_info.surface_cover.attribution);
+            map.attributionControl.addAttribution(surface_info.air_temp_precipitation.attribution);
         }
     };
     xhr.send();
@@ -66,5 +73,3 @@ function requestSurfaceData(e) {
 
 myMarker.on('move', throttle(requestSurfaceData, 100));
 map.on('click', requestSurfaceData);
-map.on('locationfound', requestSurfaceData);
-map.locate();
