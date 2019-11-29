@@ -1,15 +1,10 @@
 import gdal
 import gdalconst
-import ogr
 import struct
-import logging
 
 class GeoTiffHandler:
 
-    logger = logging.getLogger(__name__)
-
     def __init__(self, file_name):
-        self.file_name = file_name
         self._fmttypes = {
 	    gdalconst.GDT_Byte: 'B',
 	    gdalconst.GDT_Int16: 'h',
@@ -19,28 +14,32 @@ class GeoTiffHandler:
 	    gdalconst.GDT_Float32: 'f',
 	    gdalconst.GDT_Float64: 'f'
 	    }
+        self.ds = gdal.Open(file_name, gdalconst.GA_ReadOnly)
+        if self.ds is None:
+            raise FileNotFoundError(file_name)
+        self.transf = self.ds.GetGeoTransform()
+        self.cols = self.ds.RasterXSize
+        self.rows = self.ds.RasterYSize
+        self.bands = self.ds.RasterCount
+        self.transfInv = gdal.InvGeoTransform(self.transf)
 
     def _pt2fmt(self, pt):
         return self._fmttypes.get(pt, 'x')
 
-    def get_value_at_position(self, lat, lon):
-        ds = gdal.Open(self.file_name, gdalconst.GA_ReadOnly)
-        if ds is None:
-            self.logger.warning('Failed open file')
-            return
-        transf = ds.GetGeoTransform()
-        cols = ds.RasterXSize
-        rows = ds.RasterYSize
-        bands = ds.RasterCount
-        band = ds.GetRasterBand(1)
+    def get_value_at_position(self, lat, lon, raster_band=1):
+        band = self.ds.GetRasterBand(raster_band)
         bandtype = gdal.GetDataTypeName(band.DataType)
-        driver = ds.GetDriver().LongName
-        transfInv = gdal.InvGeoTransform(transf)
-        px, py = gdal.ApplyGeoTransform(transfInv, lon, lat)
-        if px > cols or py > rows:
+        px, py = gdal.ApplyGeoTransform(self.transfInv, lon, lat)
+        if px > self.cols or py > self.rows:
             return None
         structval = band.ReadRaster(int(px), int(py), 1, 1,
             buf_type=band.DataType)
         fmt = self._pt2fmt(band.DataType)
         value = struct.unpack(fmt, structval)
         return value[0]
+
+    def get_values_at_position(self, lat, lon):
+        results = []
+        for raster_band in range(1, self.bands+1):
+            results.append(self.get_value_at_position(lat, lon, raster_band))
+        return results
