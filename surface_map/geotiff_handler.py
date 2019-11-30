@@ -36,6 +36,13 @@ class GeoTiffHandler:
             buf_type=band.DataType)
         fmt = self._pt2fmt(band.DataType)
         value = struct.unpack(fmt, structval)
+        if value[0] == band.GetNoDataValue():
+            if fmt == 'f':
+                return float('nan')
+            else:
+                return None
+        else:
+            result = value[0]
         return value[0]
 
     def get_values_at_position(self, lat, lon):

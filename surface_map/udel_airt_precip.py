@@ -17,23 +17,11 @@ class UDelAirTPrecip:
         self.nh_precip = NetCDFHandler(os.path.join(self.path,
             'precip.mon.ltm.v501.nc'), 'precip')
 
-    def get_temperature_values_at_position(self, lat, lon):
-        values = self.nh_air_temp.get_values_at_position(lat, lon)
-        nodata = float(self.nh_air_temp.metadata['air#missing_value'])
-        values = [i if i >= -273.15 else float('nan') for i in values]
-        return values
-        
-    def get_precipitation_values_at_position(self, lat, lon):
-        values = self.nh_precip.get_values_at_position(lat, lon)
-        nodata = float(self.nh_precip.metadata['precip#missing_value'])
-        values = [i if i >= 0 else float('nan') for i in values]
-        return values
-
     def get_data_at_position(self, lat, lon):
         if lon < 0:
             lon += 360
-        temperatures = self.get_temperature_values_at_position(lat, lon)
-        precipitation = self.get_precipitation_values_at_position(lat, lon)
+        temperatures = self.nh_air_temp.get_values_at_position(lat, lon)
+        precipitation = self.nh_precip.get_values_at_position(lat, lon)
         return {
             'annual_precip_cm': round(sum(precipitation), 2),
             'min_air_temp': round(min(temperatures), 2),
