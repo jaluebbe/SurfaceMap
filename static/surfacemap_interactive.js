@@ -36,9 +36,6 @@ var myMarker = L.marker([50, 8.6], {
     draggable: true,
     zIndexOffset: 1000
 });
-myMarker.bindTooltip("", {
-    direction: 'top'
-});
 
 function requestSurfaceData(e) {
     var xhr = new XMLHttpRequest();
@@ -57,9 +54,6 @@ function requestSurfaceData(e) {
                     map.panInside(myMarker.getLatLng());
                 }
             }
-            myMarker._tooltip.setContent("<div style='text-align: center;'><b>"
-                + surface_info.surface_cover.label + "</b></div><div style='text-align: center;'>"
-                + surface_info.surface_cover.source + '&nbsp;(' + surface_info.surface_cover.value + ')</div>');
 	    info.updateSurfaceInfo(
 	        surface_info.surface_cover.label, surface_info.surface_cover.value, surface_info.surface_cover.source,
 	        surface_info.air_temp_precipitation.annual_precip_cm,
