@@ -20,14 +20,14 @@ async def root():
     return FileResponse('static/surfacemap.html')
 
 @app.get("/api/get_surface_cover")
-def get_surface_data(
+def get_surface_cover(
     lat: float = Query(..., ge=-90, le=90),
     lon: float = Query(..., ge=-180, le=180)
     ):
     return gc.get_data_at_position(lat, lon)
 
 @app.get("/api/get_air_temp_precipitation")
-def get_surface_data(
+def get_air_temp_precipitation(
     lat: float = Query(..., ge=-90, le=90),
     lon: float = Query(..., ge=-180, le=180)
     ):
