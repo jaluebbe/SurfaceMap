@@ -1,4 +1,4 @@
-Pvar throttle = function throttle(func, limit) {
+var throttle = function throttle(func, limit) {
   var inThrottle;
   return function () {
     var args = arguments;
