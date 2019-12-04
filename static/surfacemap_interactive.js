@@ -1,4 +1,4 @@
-var throttle = function throttle(func, limit) {
+Pvar throttle = function throttle(func, limit) {
   var inThrottle;
   return function () {
     var args = arguments;
@@ -57,7 +57,7 @@ function requestSurfaceData(e) {
 	    info.updateSurfaceInfo(
 	        surface_info.surface_cover.label, surface_info.surface_cover.value, surface_info.surface_cover.source,
 	        surface_info.air_temp_precipitation.annual_precip_cm,
-	        surface_info.air_temp_precipitation.min_air_temp, surface_info.air_temp_precipitation.max_air_temp,);
+	        surface_info.air_temp_precipitation.min_air_temp, surface_info.air_temp_precipitation.max_air_temp);
             map.attributionControl.addAttribution(surface_info.surface_cover.attribution);
             map.attributionControl.addAttribution(surface_info.air_temp_precipitation.attribution);
         }
