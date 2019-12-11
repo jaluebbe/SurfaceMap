@@ -38,6 +38,6 @@ gunicorn -w8 -b 0.0.0.0:5000 backend_fastapi:app -k uvicorn.workers.UvicornWorke
 ```
 ### Build and run as a Docker container
 ```
-docker build -t surface_map_docker ./
-docker run -d -p 80:80 --mount src=`pwd`/surface_map/maps,target=/app/surface_map/maps,type=bind surface_map_docker
+docker build -t surfacemap ./
+docker run -d -p 80:80 --mount src=`pwd`/surface_map/maps,target=/app/surface_map/maps,type=bind surfacemap
 ```
