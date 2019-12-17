@@ -4,7 +4,8 @@ from surface_map.geotiff_handler import GeoTiffHandler
 
 class GlobCover2009:
 
-    path = 'surface_map/maps/globcover2009'
+    path = os.path.join(os.path.dirname(os.path.abspath(__file__)),
+        'maps/globcover2009')
     attribution_url = ('http://due.esrin.esa.int/page_globcover.php')
     attribution_name = 'GlobCover 2009'
     attribution = ('&copy <a href="{}">{}</a>').format(attribution_url,

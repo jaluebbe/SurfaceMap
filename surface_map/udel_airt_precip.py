@@ -4,7 +4,8 @@ from surface_map.netcdf_handler import NetCDFHandler
 
 class UDelAirTPrecip:
 
-    path = 'surface_map/maps/udel_airt_precip'
+    path = os.path.join(os.path.dirname(os.path.abspath(__file__)),
+        'maps/udel_airt_precip')
     attribution_url = (
         'https://www.esrl.noaa.gov/psd/data/gridded/data.UDel_AirT_Precip.html')
     attribution_name = 'UDel_AirT_Precip'
