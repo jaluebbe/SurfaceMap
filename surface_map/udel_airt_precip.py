@@ -10,24 +10,33 @@ class UDelAirTPrecip:
     attribution_name = 'UDel_AirT_Precip'
     attribution = ('<a href="{}">{}</a>').format(attribution_url,
         attribution_name)
+    nh_air_temp = None
+    nh_precip = None
 
-    def __init__(self):
-        self.nh_air_temp = NetCDFHandler(os.path.join(self.path,
-            'air.mon.ltm.v501.nc'), 'air')
-        self.nh_precip = NetCDFHandler(os.path.join(self.path,
-            'precip.mon.ltm.v501.nc'), 'precip')
+    def __init__(self, air_temp=True, precip=True):
+        if air_temp:
+            self.nh_air_temp = NetCDFHandler(os.path.join(self.path,
+                'air.mon.ltm.v501.nc'), 'air')
+        if precip:
+            self.nh_precip = NetCDFHandler(os.path.join(self.path,
+                'precip.mon.ltm.v501.nc'), 'precip')
 
     def get_data_at_position(self, lat, lon):
         if lon < 0:
             lon += 360
-        temperatures = self.nh_air_temp.get_values_at_position(lat, lon)
-        precipitation = self.nh_precip.get_values_at_position(lat, lon)
-        return {
-            'annual_precip_cm': round(sum(precipitation), 2),
-            'min_air_temp': round(min(temperatures), 2),
-            'max_air_temp': round(max(temperatures), 2),
-            'mean_air_temp': round(sum(temperatures) / len(temperatures), 2),
-            'source': self.attribution_name, 'attribution': self.attribution}
+        response = {'source': self.attribution_name,
+            'attribution': self.attribution}
+        if self.nh_air_temp is not None:
+            temperatures = self.nh_air_temp.get_values_at_position(lat, lon)
+            response.update({
+                'min_air_temp': round(min(temperatures), 2),
+                'max_air_temp': round(max(temperatures), 2),
+                'mean_air_temp': round(sum(temperatures) / len(temperatures), 2)
+                })
+        if self.nh_precip is not None:
+            precipitation = self.nh_precip.get_values_at_position(lat, lon)
+            response.update({'annual_precip_cm': round(sum(precipitation), 2)})
+        return response
 
 if __name__ == "__main__":
 
