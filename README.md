@@ -34,10 +34,25 @@ The web interface and API is hosted using FastAPI. It could also be run as a Doc
 
 ### FastAPI
 ```
-gunicorn -w8 -b 0.0.0.0:5000 backend_fastapi:app -k uvicorn.workers.UvicornWorker
+gunicorn -w8 -b 0.0.0.0:8000 backend_fastapi:app -k uvicorn.workers.UvicornWorker
 ```
 ### Build and run as a Docker container
 ```
 docker build -t surfacemap ./
-docker run -d -p 80:80 --mount src=`pwd`/surface_map/maps,target=/app/surface_map/maps,type=bind surfacemap
+docker run -d -p 8000:80 --mount src=`pwd`/surface_map/maps,target=/app/surface_map/maps,type=bind surfacemap
 ```
+or for the alpine based image which consumes less disk space:
+```
+docker build -t surfacemap:alpine -f Dockerfile.alpine ./
+docker run -d -p 8000:80 --mount src=`pwd`/surface_map/maps,target=/app/surface_map/maps,type=bind surfacemap:alpine
+```
+### Downloading images from hub.docker.com
+Instead of building the image, you may try to download it from hub.docker.com. 
+Simply use jaluebbe/surfacemap or jaluebbe/surfacemap:alpine as image to run.
+
+## Accessing the API and web interface
+
+You'll find an interative map at http://127.0.0.1:8000. 
+Click anywhere on the map to obtain the local surface information. 
+You may drag the marker on the map. 
+Documentation of the API is available at http://127.0.0.1:8000/docs (you can try out the API) and http://127.0.0.1:8000/redoc (more information but less interactive).
