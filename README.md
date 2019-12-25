@@ -32,8 +32,12 @@ Download ftp://ftp.cdc.noaa.gov/Datasets/udel.airt.precip/precip.mon.ltm.v501.nc
 
 Shapes describing all countries on the world were downloaded from 
 
-https://www.naturalearthdata.com/downloads/50m-cultural-vectors/50m-admin-0-countries-2/ .
+http://www.naturalearthdata.com/downloads/10m-cultural-vectors/ .
 
+The shapefile was converted to GeoJSON using
+```
+ogr2ogr -f geoJSON countries_ne_10m.json ne_10m_admin_0_countries.shp
+```
 ## Startup of the web interface
 
 The web interface and API is hosted using FastAPI. It could also be run as a Docker container.

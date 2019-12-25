@@ -8,19 +8,20 @@ if speedups.available:
 from shapely.geometry import shape, Point
 
 path = os.path.dirname(os.path.abspath(__file__))
+file_name = 'countries_ne_10m.json'
 
 def add_bounding_boxes():
-    with open(os.path.join(path, 'countries.json')) as f:
+    with open(os.path.join(path, file_name)) as f:
         countries = json.load(f)
     for feature in countries['features']:
         polygon = shape(feature['geometry'])
         feature['bbox'] = list(polygon.bounds)
-    with open(os.path.join(path, 'countries.json'), 'w') as f:
+    with open(os.path.join(path, file_name), 'w') as f:
         json.dump(countries, f)
 
 #add_bounding_boxes()
 
-with open(os.path.join(path, 'countries.json')) as f:
+with open(os.path.join(path, file_name)) as f:
     countries = json.load(f)
 
 def get_country_for_position(latitude, longitude):
