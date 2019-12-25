@@ -23,13 +23,15 @@ info.onAdd = function (map) {
 info.showText = function(infoText) {
     this._div.innerHTML = infoText;
 };
-info.updateSurfaceInfo = function(label, value, source, precipitation, min_air_temp, max_air_temp) {
+info.updateSurfaceInfo = function(label, value, source, precipitation, min_air_temp, max_air_temp, country, continent) {
     this._div.innerHTML = "<div style='text-align: right;'><b>"
         + label + "</b></div><div style='text-align: right;'>" 
         + source + "&nbsp;(" + value +")</div>"
         + "<div style='text-align: right;'>rainfall / year " + precipitation + "&nbsp;cm</div>"
         + "<div style='text-align: right;'>avg. monthly T from " + min_air_temp + "&nbsp;&deg;C to "
-        + max_air_temp + "&nbsp;&deg;C</div>";
+        + max_air_temp + "&nbsp;&deg;C</div>"
+        + "<div style='text-align: right;'>" + country + "</div>"
+        + "<div style='text-align: right;'>" + continent + "</div>";
 };
 info.addTo(map);
 var myMarker = L.marker([50, 8.6], {
@@ -57,7 +59,8 @@ function requestSurfaceData(e) {
 	    info.updateSurfaceInfo(
 	        surface_info.surface_cover.label, surface_info.surface_cover.value, surface_info.surface_cover.source,
 	        surface_info.air_temp_precipitation.annual_precip_cm,
-	        surface_info.air_temp_precipitation.min_air_temp, surface_info.air_temp_precipitation.max_air_temp);
+	        surface_info.air_temp_precipitation.min_air_temp, surface_info.air_temp_precipitation.max_air_temp,
+	        surface_info.country, surface_info.continent);
             map.attributionControl.addAttribution(surface_info.surface_cover.attribution);
             map.attributionControl.addAttribution(surface_info.air_temp_precipitation.attribution);
         }

@@ -28,6 +28,12 @@ UDel_AirT_Precip data provided by the NOAA/OAR/ESRL PSD, Boulder, Colorado, USA,
 
 Download ftp://ftp.cdc.noaa.gov/Datasets/udel.airt.precip/precip.mon.ltm.v501.nc and ftp://ftp.cdc.noaa.gov/Datasets/udel.airt.precip/air.mon.ltm.v501.nc to surface_map/maps/udel_airt_precip/ .
 
+### Country shapes
+
+Shapes describing all countries on the world were downloaded from 
+
+https://www.naturalearthdata.com/downloads/50m-cultural-vectors/50m-admin-0-countries-2/ .
+
 ## Startup of the web interface
 
 The web interface and API is hosted using FastAPI. It could also be run as a Docker container.

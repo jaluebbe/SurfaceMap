@@ -4,6 +4,8 @@ from starlette.staticfiles import StaticFiles
 from starlette.responses import FileResponse
 from surface_map.globcover2009 import GlobCover2009
 from surface_map.udel_airt_precip import UDelAirTPrecip
+import surface_map.countries as countries
+
 gc = GlobCover2009()
 air_precip = UDelAirTPrecip()
 
@@ -48,5 +50,8 @@ def get_surface_data(
         'mean_air_temp']:
         if math.isnan(air_temp_precipitation[key]):
             air_temp_precipitation[key] = 'NaN'
-    return {'surface_cover': gc.get_data_at_position(lat, lon),
-        'air_temp_precipitation': air_temp_precipitation}
+    country = countries.get_country_for_position(lat, lon)
+    return {
+        'surface_cover': gc.get_data_at_position(lat, lon),
+        'air_temp_precipitation': air_temp_precipitation,
+        'country': country.get('ADMIN'), 'continent': country.get('CONTINENT')}
