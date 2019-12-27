@@ -378,10 +378,11 @@ RUN apk add --no-cache \
     && rm -f /usr/lib/libwebpmux.so* /usr/lib/libwebpdemux.so* /usr/lib/libwebpdecoder.so* \
     && ln -s /usr/bin/python3 /usr/bin/python \
     && ln -s /usr/bin/pip3 /usr/bin/pip \
-    && apk add --no-cache --virtual .build-deps gcc libc-dev make python3-dev \
+    && apk add --no-cache --virtual .build-deps gcc libc-dev make python3-dev geos-dev \
+    && apk add libc6-compat geos \
     && pip install --upgrade pip \
-    && pip install uvicorn gunicorn fastapi aiofiles \
-    && apk del .build-deps gcc libc-dev make
+    && pip install uvicorn gunicorn fastapi aiofiles shapely \
+    && apk del .build-deps
 
 # Order layers starting with less frequently varying ones
 COPY --from=builder  /build_thirdparty/usr/ /usr/
